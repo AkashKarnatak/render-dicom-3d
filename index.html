@@ -6,11 +6,39 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
+  <style>
+    #loader {
+      width: 150px;
+      height: 150px;
+      border: 15px solid #f0f9ff;
+      border-top-color: #0284c7;
+      border-radius: 100%;
+      display: none;
+      position: absolute;
+      top: calc(50% - 75px);
+      left: calc(50% - 75px);
+      z-index: 100;
+      animation: rotate 1s infinite forwards linear;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body>
   <div id="app"></div>
-  <input type="file" name="file" id="file" multiple />
+  <div style="position: absolute; z-index: 100; color: #fff">
+    <input type="file" name="file" id="file" multiple />
+  </div>
+  <div id="loader" style=""></div>
   <script type="module" src="/main.js"></script>
 </body>
 

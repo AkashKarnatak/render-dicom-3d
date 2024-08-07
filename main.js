@@ -1,18 +1,15 @@
-import { setPipelineWorkerUrl, readImageDicomFileSeries } from '@itk-wasm/dicom'
-const $input = document.querySelector('#file')
+import './presets'
+import { resetRenderer, renderDicomFileSeries } from './visualize'
 
-// set url to where worker is available (your custom location specified in vite config)
-setPipelineWorkerUrl(
-  document.location.origin + '/itk/itk-wasm-pipeline.min.worker.js',
-)
+const $input = document.querySelector('#file')
+const $loader = document.querySelector('#loader')
+
 $input.addEventListener('change', async (e) => {
+  // clean up (reset camera position + remove volumes)
+  resetRenderer()
+
+  $loader.style.display = 'block'
   const files = Array.from(e.target.files)
-  console.log(files)
-  const { outputImage, webWorkerPool, sortedFilenames } =
-    await readImageDicomFileSeries({
-      webWorkerPool: null,
-      inputImages: files,
-      singleSortedSeries: true,
-    })
-  console.log(outputImage)
+  await renderDicomFileSeries(files)
+  $loader.style.display = 'none'
 })
