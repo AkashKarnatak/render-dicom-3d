@@ -7,9 +7,16 @@ import vtkColorTransferFunction from '@kitware/vtk.js/Rendering/Core/ColorTransf
 import vtkPiecewiseFunction from '@kitware/vtk.js/Common/DataModel/PiecewiseFunction'
 import vtkITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper'
 import { setPipelineWorkerUrl, readImageDicomFileSeries } from '@itk-wasm/dicom'
+import {
+  nrrdReadImage,
+  setPipelineWorkerUrl as setPipelineWorkerUrlImageIO,
+} from '@itk-wasm/image-io'
 
 // set url to where worker is available (your custom location specified in vite config)
 setPipelineWorkerUrl(
+  document.location.origin + '/itk/itk-wasm-pipeline.min.worker.js',
+)
+setPipelineWorkerUrlImageIO(
   document.location.origin + '/itk/itk-wasm-pipeline.min.worker.js',
 )
 
@@ -21,9 +28,16 @@ export const renderer = fullScreenRenderer.getRenderer()
 export const renderWindow = fullScreenRenderer.getRenderWindow()
 const mapper = vtkVolumeMapper.newInstance()
 const actor = vtkVolume.newInstance()
+const nrrdMapper = vtkVolumeMapper.newInstance()
+const nrrdActor = vtkVolume.newInstance()
 
 mapper.setSampleDistance(0.7)
 actor.setMapper(mapper)
+renderer.addVolume(actor)
+
+nrrdMapper.setSampleDistance(0.7)
+nrrdActor.setMapper(nrrdMapper)
+renderer.addVolume(nrrdActor)
 
 // clean up (reset camera position + remove volumes)
 export function resetRenderer(presetName) {
@@ -54,6 +68,43 @@ export async function renderDicomFileSeries(files) {
   renderer.getActiveCamera().elevation(-90)
   renderer.updateLightsGeometryToFollowCamera()
   renderWindow.render()
+}
+
+export async function renderNrrdFile(file) {
+  const { image } = await nrrdReadImage(file)
+  console.log(image)
+
+  const vtkImage = vtkITKHelper.convertItkToVtkImage(image)
+  console.log(image)
+
+  // Set up color and opacity transfer functions for talus
+  const ctfTalus = vtkColorTransferFunction.newInstance()
+  ctfTalus.addRGBPoint(0, 0.0, 0.0, 0.0)
+  ctfTalus.addRGBPoint(1, 1.0, 1.0, 0.0) // Red color for segmentation
+
+  const ofunTalus = vtkPiecewiseFunction.newInstance()
+  ofunTalus.addPoint(0, 0)
+  ofunTalus.addPoint(1, 1) // Semi-transparent
+
+  nrrdActor.getProperty().setRGBTransferFunction(0, ctfTalus)
+  nrrdActor.getProperty().setScalarOpacity(0, ofunTalus)
+  nrrdActor.getProperty().setInterpolationTypeToLinear()
+  nrrdActor.getProperty().setShade(true)
+
+  nrrdMapper.setInputData(vtkImage)
+  renderer.addVolume(nrrdActor)
+  renderWindow.render()
+}
+
+let isVisible = true
+export function toggleNrrdSegment() {
+  if (isVisible) {
+    renderer.removeVolume(nrrdActor)
+  } else {
+    renderer.addVolume(nrrdActor)
+  }
+  renderWindow.render()
+  isVisible = !isVisible
 }
 
 export function createTransferFunctionFromPreset(presetName) {

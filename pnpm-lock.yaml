@@ -11,6 +11,9 @@ importers:
       '@itk-wasm/dicom':
         specifier: ^7.0.1
         version: 7.0.1
+      '@itk-wasm/image-io':
+        specifier: ^1.3.1
+        version: 1.3.1
       '@kitware/vtk.js':
         specifier: ^32.0.0
         version: 32.0.0(@babel/preset-env@7.25.3(@babel/core@7.25.2))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.93.0)(wslink@2.1.1)
@@ -770,6 +773,9 @@ packages:
 
   '@itk-wasm/dicom@7.0.1':
     resolution: {integrity: sha512-N95PmEIgLCH5QysZMSB1EyGzJ7YMD1l00ByYwCgRIuBkZEMukNVgucWqqE0sjgmC6EA07AZ8aU/Bs/g1cvzI6Q==}
+
+  '@itk-wasm/image-io@1.3.1':
+    resolution: {integrity: sha512-PJBNyez1qJD4+rkFG5/BQ6G/4yzs1uKgPPw6n+i8yEF6qzN07aY444R6bV6nkWuvbLpXe6XxGPmfRqkJKM8PWw==}
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -1601,6 +1607,10 @@ packages:
 
   itk-wasm@1.0.0-b.177:
     resolution: {integrity: sha512-cgl+u6BMhe2Z3Nn37DxIkqCf2b4qHwUO0rpan01ftq47ksjmewTCBr96y2x+9eOeRxyvPygpBeHMcSSqM/c7tQ==}
+    hasBin: true
+
+  itk-wasm@1.0.0-b.179:
+    resolution: {integrity: sha512-+jiDPWk4T0PdRcKrBS2xSy2qjnlxxnVgowB+kVjOrz6P7PsA7lGBqDU1pxCQfPUUdLfHjsAUEgNeVihl8KFfQQ==}
     hasBin: true
 
   jest-worker@27.5.1:
@@ -3051,6 +3061,14 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  '@itk-wasm/image-io@1.3.1':
+    dependencies:
+      axios: 1.7.3
+      itk-wasm: 1.0.0-b.179
+      mime-types: 2.1.35
+    transitivePeerDependencies:
+      - debug
+
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
       '@jridgewell/set-array': 1.2.1
@@ -3934,6 +3952,23 @@ snapshots:
   it-stream-types@2.0.1: {}
 
   itk-wasm@1.0.0-b.177:
+    dependencies:
+      '@itk-wasm/dam': 1.1.1
+      '@thewtex/zstddec': 0.2.1
+      '@types/emscripten': 1.39.13
+      axios: 1.7.3
+      chalk: 5.3.0
+      comlink: 4.4.1
+      commander: 11.1.0
+      fs-extra: 11.2.0
+      glob: 8.1.0
+      markdown-table: 3.0.3
+      mime-types: 2.1.35
+      wasm-feature-detect: 1.6.2
+    transitivePeerDependencies:
+      - debug
+
+  itk-wasm@1.0.0-b.179:
     dependencies:
       '@itk-wasm/dam': 1.1.1
       '@thewtex/zstddec': 0.2.1

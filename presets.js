@@ -4,6 +4,7 @@ import {
   renderWindow,
   createTransferFunctionFromPreset,
   updateTransferFunctions,
+  toggleNrrdSegment,
 } from './visualize'
 
 // set medical presets
@@ -53,4 +54,13 @@ dropdown.addEventListener('change', (e) => {
   renderWindow.render()
 })
 
-document.querySelector('#file').insertAdjacentElement('afterend', dropdown)
+const toggle = document.createElement('button')
+toggle.type = 'button'
+toggle.id = 'toggle'
+toggle.innerHTML = 'Toggle Segment'
+toggle.addEventListener('click', (e) => {
+  toggleNrrdSegment()
+})
+
+document.querySelector('#nrrdFile').insertAdjacentElement('afterend', toggle)
+document.querySelector('#nrrdFile').insertAdjacentElement('afterend', dropdown)
