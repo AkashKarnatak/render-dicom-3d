@@ -99,8 +99,11 @@ export async function renderNrrdFile(file) {
 let isVisible = true
 export function toggleNrrdSegment() {
   if (isVisible) {
-    renderer.removeVolume(nrrdActor)
+    renderer.removeVolume(actor)
   } else {
+    renderer.removeVolume(nrrdActor)
+    renderWindow.render()
+    renderer.addVolume(actor)
     renderer.addVolume(nrrdActor)
   }
   renderWindow.render()
